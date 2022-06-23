@@ -1,0 +1,102 @@
+<html>
+<body>
+
+<span>Book id</span>
+<input type="text" id="id">
+<span id="msg">message(what happened book added or not)</span><br><br>
+<span>book name</span>
+<input type="text" id="name"><br><br>
+<span>price</span>
+<input type="text" id="price"><br><br>
+<button id="update">Book Store(Update)</button>
+
+
+<!-- <button id="b2"> jquery works</button> -->
+
+
+</body>
+
+<script src="jquery-3.5.1.min.js"></script>
+<script>//our scrip will come here 
+
+	$(()=> {
+		console.log("all tags loaded");
+
+		$('#id').blur(() =>{
+			console.log("blur event occour");
+
+			let input = {bookid: $('#id').val()}
+			let parameters = {
+				data: input,
+				url: 'http://localhost:80/getbook',
+				type: 'get',
+				dataType: 'json',
+				success: (output)=>{
+					if(output.status === true){
+						$('#name').val(output.bookdetails.bookname);
+						$('#price').val(output.bookdetails.price);
+						$('#msg').text("bookid is found")
+
+					}
+					else{
+						$('#name').val("");
+						$('#price').val("");
+						$('#msg').text("bookid is not found")
+					}
+				},
+				error: (errorfromserver)=> {
+					console.log("Error occoured" +errorfromserver);
+				}
+			}
+			$.ajax(parameters);
+		});
+
+
+		$('#update').click(()=>{
+			console.log("update button clicked");
+
+			let input = {bookid: $('#id').val(), bookname: $('#name').val(), price: $('#price').val()}
+
+			let parameters = {
+				data: input,
+				url: 'http://localhost:80/updatebook',
+				type: 'get',
+				dataType: 'json',
+				success: (output)=>{
+					if(output.status === true){
+						console.log("update successfully");
+						$('#msg').text("update succesfully");
+
+					}
+					else{
+						console.log("update Unsuccessfully");
+						$('#msg').text("update Unsuccesfully");
+					}
+				},
+				error: (errorfromserver)=> {
+					console.log("Error occoured" +errorfromserver);
+					$('#msg').text("Error Occured");
+				}
+			}
+			$.ajax(parameters);
+		});
+	});
+
+
+
+$(document).ready(function()
+{
+console.log("no more sins");
+$("#b2").click(function () 
+	{ 
+		//console.log("jquery works");
+		alert("jquery works")
+	});
+	
+});
+
+
+</script>
+
+
+</html>
